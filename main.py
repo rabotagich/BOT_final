@@ -30,23 +30,23 @@ new_region_markup = types.InlineKeyboardMarkup()
 async def start(message: types.Message):
     await message.answer('Привет, выбери город, в котором хочешь узнать погоду🌡🌈', reply_markup= get_region_change())
     await Form_weather.started_state.set()
-    print('Start')
+    
 
 @dp.callback_query_handler(state=Form_weather.started_state)
 async def region_choice(query: types.CallbackQuery, state: FSMContext):
-    print('test0')
+    
     if query.data == 'Меню выбора':
-        print('test1')
+        
         # time.sleep(0.3)
         await query.message.edit_text('Вот список доступных регионов 📃', reply_markup=get_region_kb())
         await Form_weather.region_shows_state.set()
     
 @dp.callback_query_handler(state=Form_weather.region_shows_state)
 async def change(query: types.CallbackQuery, state: FSMContext):
-    print('test2')
+    
     if query.data != 'Меню выбора':
         Region = requests.get(f'https://api.openweathermap.org/data/2.5/weather?q={query.data}&appid=9481a85b5698cd4123700515f65695b7').json()
-        print('test3')
+        
 
         temp = str(round(Region['main']['temp'] - 273)) + ' ℃'
         humidity = str(Region['main']['humidity']) + ' %'
